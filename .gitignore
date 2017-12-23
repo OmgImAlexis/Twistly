@@ -1,0 +1,11 @@
+.DS_Store
+*.log
+.idea
+node_modules
+coverage
+.nyc_output
+*.awspublish*
+*.env
+*.pem
+build
+temp.md

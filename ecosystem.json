@@ -1,0 +1,63 @@
+{
+  "apps": [
+    {
+      "name": "web",
+      "script": "web.js",
+      "exec_mode": "cluster",
+      "instances": "max",
+      "env_production": {
+        "NODE_ENV": "production"
+      },
+      "env_staging": {
+        "NODE_ENV": "staging"
+      }
+    },
+    {
+      "name": "api",
+      "script": "api.js",
+      "exec_mode": "cluster",
+      "instances": "max",
+      "env_production": {
+        "NODE_ENV": "production"
+      },
+      "env_staging": {
+        "NODE_ENV": "staging"
+      }
+    },
+    {
+      "name": "agenda",
+      "script": "agenda.js",
+      "exec_mode": "cluster",
+      "instances": "max",
+      "env_production": {
+        "NODE_ENV": "production"
+      },
+      "env_staging": {
+        "NODE_ENV": "staging"
+      }
+    },
+    {
+      "name": "proxy",
+      "script": "proxy.js",
+      "exec_mode": "cluster",
+      "instances": "max",
+      "env_production": {
+        "NODE_ENV": "production"
+      },
+      "env_staging": {
+        "NODE_ENV": "staging"
+      }
+    }
+  ],
+  "deploy": {
+    "production": {
+      "user": "deploy",
+      "host": "twistly-deploy",
+      "ref": "origin/master",
+      "repo": "git@github.com:twistly/twistly.git",
+      "path": "/var/www/production",
+      "post-deploy":
+        "yarn && NODE_ENV=production yarn build && yarn publish-assets && pm2 startOrGracefulReload ecosystem.json --env production"
+    }
+  }
+}
