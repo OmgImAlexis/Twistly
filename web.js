@@ -3,7 +3,6 @@ const Server = require('@ladjs/web');
 const Graceful = require('@ladjs/graceful');
 const mongoose = require('@ladjs/mongoose');
 const maxListenersExceededWarning = require('max-listeners-exceeded-warning');
-
 const config = require('./config');
 const routes = require('./routes');
 const { i18n, logger, passport } = require('./helpers');
