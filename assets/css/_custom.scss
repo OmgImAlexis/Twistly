@@ -1,1 +1,8 @@
 // put your custom styles here
+
+// .fa is used for html entites in order select
+// so you need to use .oa so the js isn't triggered
+.oa {
+  @extend .fa;
+  display: block;
+}

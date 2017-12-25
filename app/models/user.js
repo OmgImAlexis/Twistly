@@ -2,18 +2,20 @@ const validator = require('validator');
 const s = require('underscore.string');
 const randomstring = require('randomstring-extended');
 const mongoose = require('mongoose');
+const mongooseRole = require('mongoose-role');
 const mongooseCommonPlugin = require('mongoose-common-plugin');
 const passportLocalMongoose = require('passport-local-mongoose');
-
 const config = require('../../config');
 const i18n = require('../../helpers/i18n');
+
+const { ObjectId } = mongoose.Schema.Types;
 
 const User = new mongoose.Schema({
   // group permissions
   group: {
     type: String,
     default: 'user',
-    enum: ['admin', 'user'],
+    enum: ['admin', 'user', 'pro'],
     lowercase: true,
     trim: true
   },
@@ -98,7 +100,12 @@ const User = new mongoose.Schema({
     type: String,
     trim: true,
     validate: val => validator.isIP(val)
-  }
+  },
+  accounts: [
+    {
+      type: ObjectId
+    }
+  ]
 });
 
 User.pre('validate', function(next) {
@@ -112,6 +119,18 @@ User.pre('validate', function(next) {
     this.display_name = `${this.given_name || ''} ${this.family_name || ''}`;
 
   next();
+});
+
+User.plugin(mongooseRole, {
+  rolePath: 'group',
+  roles: ['public', 'user', 'pro', 'admin'],
+  accessLevels: {
+    public: ['public', 'user', 'admin'],
+    anon: ['public'],
+    user: ['user', 'admin'],
+    pro: ['pro', 'admin'],
+    admin: ['admin']
+  }
 });
 
 User.plugin(mongooseCommonPlugin, { object: 'user' });

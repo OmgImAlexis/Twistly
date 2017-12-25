@@ -1,14 +1,34 @@
+const Rollbar = require('rollbar');
 const Router = require('koa-router');
 const render = require('koa-views-render');
-
 const { web } = require('../../app/controllers');
 const { policies } = require('../../helpers');
+const config = require('./../../config');
 const admin = require('./admin');
 const auth = require('./auth');
-const myAccount = require('./my-account');
 const dashboard = require('./dashboard');
+const myAccount = require('./my-account');
+const queues = require('./queues');
+const accounts = require('./accounts');
 
 const router = new Router({ prefix: '/:locale' });
+
+// Errors handling using Rollbar as first middleware to catch exception
+const rollbar = new Rollbar(config.rollbar.token);
+router.use(async (ctx, next) => {
+  try {
+    await next();
+  } catch (err) {
+    rollbar.error(
+      err,
+      Object.assign({}, ctx.request, {
+        user: ctx.state.user
+      })
+    );
+    // Rethrow so Lad can pick it back up.
+    throw err;
+  }
+});
 
 router
   .get('/', web.auth.homeOrDashboard)
@@ -38,6 +58,8 @@ router
 router.use(auth.routes());
 router.use(dashboard.routes());
 router.use(myAccount.routes());
+router.use(queues.routes());
+router.use(accounts.routes());
 router.use(admin.routes());
 
 module.exports = router;

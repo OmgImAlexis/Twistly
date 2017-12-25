@@ -1,7 +1,6 @@
 // eslint-disable-next-line import/no-unassigned-import
 require('babel-polyfill');
 
-const WebFont = require('webfontloader');
 const es6promise = require('es6-promise');
 const History = require('html5-history-api');
 const jQuery = require('jquery');
@@ -53,11 +52,6 @@ require('bootstrap');
 
 // Add optional support for older browsers
 es6promise.polyfill();
-
-// Google web fonts
-WebFont.load({
-  google: { families: ['Source+Code+Pro', 'Source+Sans+Pro', 'Bitter'] }
-});
 
 // Fix Facebook's appended hash bug
 facebookHashFix();

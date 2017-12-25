@@ -1,5 +1,7 @@
-const support = require('./support');
-const auth = require('./auth');
 const admin = require('./admin');
+const accounts = require('./accounts');
+const queues = require('./queues');
+const auth = require('./auth');
+const support = require('./support');
 
-module.exports = { support, auth, admin };
+module.exports = { admin, accounts, queues, auth, support };

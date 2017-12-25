@@ -1,0 +1,94 @@
+
+extends ../layout
+
+block body
+  #modal-add-queue(tabindex='-1', role='dialog').modal
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header.d-block.text-center
+          h5.modal-title= t('Add Queue')
+        form(action=ctx.path, method='POST').ajax-form.confirm-prompt.mt-3
+          input(type="hidden", name="_csrf", value=ctx.csrf)
+          .modal-body
+            .form-group.row
+              label.control-label.col-md-4.col-form-label.text-md-right= t('Name')
+              .col-md-8
+                input(type='text', name='name', required).form-control
+            .form-group.row
+              label.control-label.col-md-4.col-form-label.text-md-right= t('Accounts')
+              .col-md-8
+                select(multiple, name='accounts', required).form-control
+                  for account in accounts
+                    option.oa
+                      if account.type === 'tumblr'
+                        | &#xf174; #{account.url}
+                      if account.type === 'twitter'
+                        | &#xf081; #{account.username}
+                      if account.type === 'facebook'
+                        | &#xf082; #{account.username}
+            .form-group.row
+              label.control-label.col-md-4.col-form-label.text-md-right= t('Posts Per Period')
+              .col-md-8
+                input(type='number', name='post_count', value='200', required).form-control
+            .form-group.row
+              label.control-label.col-md-4.col-form-label.text-md-right= t('Start Time')
+              .col-md-8
+                input(type='number', name='start_time', value='0' required).form-control
+                small.form-text.text-muted 0 is 00:00:00 and 86,400,000 is 23:59:59
+            .form-group.row
+              label.control-label.col-md-4.col-form-label.text-md-right= t('End Time')
+              .col-md-8
+                input(type='number', name='end_time', value='86400000', required).form-control
+                small.form-text.text-muted 0 is 00:00:00 and 86,400,000 is 23:59:59
+          .modal-footer.text-right
+            button(type='button', data-dismiss='modal', aria-label='Cancel').btn.btn-secondary= t('Cancel')
+            button(type='submit').btn.btn-primary= t('Add Queue')
+  .container-fluid.py-3
+    .row.mt-1
+      .col-md-3.col-lg-2
+        include ../_sidebar
+      .col-md-9.col-lg-10
+        .row
+          .col-8.text-left
+             h2= t('Queues')
+          .col-4.text-right
+             button(data-toggle='modal', data-target='#modal-add-queue', type='button').btn.btn-secondary.btn-sm= t('Add Queue')
+        hr
+        .row
+          for queue in queues
+            .col-lg-6.col-md-12.mb-3
+              .card.card-bg-light
+                h4.card-header= queue.name
+                .card-body
+                  .form-group.row
+                    label.control-label.col-md-4.col-form-label.text-md-right= t('Accounts')
+                    .col-md-8
+                      select(multiple, name='name', readonly).form-control
+                        for account in queue.accounts
+                          option(selected).oa
+                            if account.type === 'tumblr'
+                              | &#xf174; #{account.url}
+                            if account.type === 'twitter'
+                              | &#xf081; #{account.username}
+                            if account.type === 'facebook'
+                              | &#xf082; #{account.username}
+                  .form-group.row
+                    label.control-label.col-md-4.col-form-label.text-md-right= t('Posts Per Period')
+                    .col-md-8
+                      input(type='number', name='post_count', value='200', readonly).form-control
+                  .form-group.row
+                    label.control-label.col-md-4.col-form-label.text-md-right= t('Start Time')
+                    .col-md-8
+                      input(type='number', name='start_time', value='0' readonly).form-control
+                      small.form-text.text-muted 0 is 00:00:00 and 86,400,000 is 23:59:59
+                  .form-group.row
+                    label.control-label.col-md-4.col-form-label.text-md-right= t('End Time')
+                    .col-md-8
+                      input(type='number', name='end_time', value='86400000', readonly).form-control
+                      small.form-text.text-muted 0 is 00:00:00 and 86,400,000 is 23:59:59
+                .card-footer.text-right
+                  form(action=ctx.path, method='POST').ajax-form.confirm-prompt
+                    input(type='hidden', name='_method', value='DELETE')
+                    input(type="hidden", name="_csrf", value=ctx.csrf)
+                    button(type='submit').btn.btn-primary= t('Shuffle Queue')
+                    button(type='submit').btn.btn-danger= t('Delete Queue')

@@ -1,0 +1,52 @@
+extends ../layout
+
+block body
+  #modal-add-account(tabindex='-1', role='dialog').modal
+    .modal-dialog(role='document')
+      .modal-content
+        .modal-header.d-block.text-center
+          h5.modal-title= t('Accounts')
+        .col-7.mb-1.mt-1.col-md-auto
+          if boolean(env.AUTH_TUMBLR_ENABLED)
+            a.btn.btn-block.btn-social.btn-tumblr(href='/auth/tumblr', role="button")
+              i.oa.fa-fw.fa-tumblr
+              = t('Add Tumblr Account')
+          if boolean(env.AUTH_TWITTER_ENABLED)
+            a.btn.btn-block.btn-social.btn-twitter(href='/auth/twitter', role="button")
+              i.oa.fa-fw.fa-twitter
+              = t('Add Twitter Account')
+          if boolean(env.AUTH_FACEBOOK_ENABLED)
+            a.btn.btn-block.btn-social.btn-facebook(href='/auth/facebook', role="button")
+              i.oa.fa-fw.fa-facebook
+              = t('Add Facebook Account')
+          if boolean(env.AUTH_GOOGLE_ENABLED)
+            a.btn.btn-block.btn-social.btn-google(href='/auth/google', role="button")
+              i.oa.fa-fw.fa-google-plus
+              = t('Add Google Account')
+          if boolean(env.AUTH_GITHUB_ENABLED)
+            a.btn.btn-block.btn-social.btn-github(href='/auth/github', role="button")
+              i.oa.fa-fw.fa-github
+              = t('Add GitHub Account')
+          if boolean(env.AUTH_LINKEDIN_ENABLED)
+            a.btn.btn-block.btn-social.btn-linkedin(href='/auth/linkedin', role="button")
+              i.oa.fa-fw.fa-linkedin
+              = t('Add LinkedIn Account')
+          if boolean(env.AUTH_INSTAGRAM_ENABLED)
+            a.btn.btn-block.btn-social.btn-instagram(href='/auth/instagram', role="button")
+              i.oa.fa-fw.fa-instagram
+              = t('Add Instagram Account')
+  .container-fluid.py-3
+    .row.mt-1
+      .col-md-3.col-lg-2
+        include ../_sidebar
+      .col-md-9.col-lg-10
+        .row
+          .col-8.text-left
+             h2= t('Accounts')
+          if boolean(env.AUTH_FACEBOOK_ENABLED) || boolean(env.AUTH_TWITTER_ENABLED) || boolean(env.AUTH_GOOGLE_ENABLED) || boolean(env.AUTH_GITHUB_ENABLED) || boolean(env.AUTH_LINKEDIN_ENABLED) || boolean(env.AUTH_INSTAGRAM_ENABLED) || boolean(env.AUTH_STRIPE_ENABLED)
+            if user.hasAccess('pro')
+              .col-4.text-right
+                 button(data-toggle='modal', data-target='#modal-add-account', type='button').btn.btn-secondary.btn-sm= t('Add Account')
+        hr
+        .row
+          pre= user

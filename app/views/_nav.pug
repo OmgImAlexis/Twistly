@@ -23,12 +23,6 @@ nav(class=['/register', '/login'].includes(ctx.pathWithoutLocale) ? 'bg-white' :
     ul.navbar-nav.ml-auto
       //- links that show only if you're logged in
       if user
-        li.nav-item.ml-md-1.mt-3.mt-md-0
-          a.btn.d-block.text-left.text-md-center(href=l('/dashboard'), class=ctx.pathWithoutLocale.startsWith('/dashboard') ? 'btn-dark' : 'btn-outline-dark')
-            = t('Dashboard')
-        li.nav-item.ml-md-1.mt-1.mt-md-0
-          a.btn.d-block.text-left.text-md-center(href=l('/my-account'), class=ctx.pathWithoutLocale.startsWith('/my-account') ? 'btn-dark' : 'btn-outline-dark')
-            = t('My Account')
         //- links that show if you're an admin
         if user.group === 'admin'
           li.nav-item.ml-md-1.mt-1.mt-md-0

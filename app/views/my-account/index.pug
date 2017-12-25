@@ -50,6 +50,10 @@ block body
                 .col-md-8
                   input(type='email', required, name='email', value=user.email).form-control
               .form-group.row
+                label.control-label.col-md-4.col-form-label.text-md-right= t('Plan')
+                .col-md-8
+                  input(type='text', required, name='plan', value=user.plan || t('Free Plan'), readonly).form-control
+              .form-group.row
                 label.control-label.col-md-4.col-form-label.text-md-right= t('Password')
                 .col-md-8.my-auto
                   button(data-toggle='modal', data-target='#modal-change-password', type='button').btn.btn-secondary.btn-sm= t('Change password')

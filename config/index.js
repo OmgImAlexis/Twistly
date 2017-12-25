@@ -114,7 +114,16 @@ const config = {
 
   // @ladjs/passport configuration (see defaults in package)
   // <https://github.com/ladjs/passport>
-  passport: {},
+  passport: {
+    local: boolean(env.AUTH_LOCAL_ENABLED),
+    google: boolean(env.AUTH_GOOGLE_ENABLED),
+    facebook: boolean(env.AUTH_FACEBOOK_ENABLED),
+    twitter: boolean(env.AUTH_TWITTER_ENABLED),
+    github: boolean(env.AUTH_GITHUB_ENABLED),
+    linkedin: boolean(env.AUTH_LINKEDIN_ENABLED),
+    instagram: boolean(env.AUTH_INSTAGRAM_ENABLED),
+    stripe: boolean(env.AUTH_STRIPE_ENABLED)
+  },
 
   // passport-local-mongoose options
   // <https://github.com/saintedlama/passport-local-mongoose>
@@ -125,14 +134,14 @@ const config = {
     lastLoginField: 'last_login_at',
     usernameLowerCase: true,
     limitAttempts: true,
-    maxAttempts: process.env.NODE_ENV === 'development' ? Number.MAX_VALUE : 5,
+    maxAttempts: env.NODE_ENV === 'development' ? Number.MAX_VALUE : 5,
     digestAlgorithm: 'sha256',
     encoding: 'hex',
     saltlen: 32,
     iterations: 25000,
     keylen: 512,
     passwordValidator: (password, fn) => {
-      if (process.env.NODE_ENV === 'development') return fn();
+      if (env.NODE_ENV === 'development') return fn();
       const howStrong = strength(password);
       fn(howStrong < 3 ? new Error('Password not strong enough') : null);
     }
@@ -150,6 +159,11 @@ const config = {
   stripe: {
     secretKey: env.STRIPE_SECRET_KEY,
     publishableKey: env.STRIPE_PUBLISHABLE_KEY
+  },
+
+  // rollbar
+  rollbar: {
+    token: env.ROLLBAR_TOKEN
   }
 };
 
