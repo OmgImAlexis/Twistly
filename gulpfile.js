@@ -25,6 +25,9 @@ const autoprefixer = require('autoprefixer');
 const reporter = require('postcss-reporter');
 const ms = require('ms');
 const opn = require('opn');
+const base64 = require('gulp-base64');
+const debug = require('gulp-debug');
+const packageImporter = require('node-sass-package-importer');
 
 const config = require('./config');
 
@@ -122,8 +125,8 @@ gulp.task('img', () => {
 });
 
 gulp.task('css', () => {
-  return gulp
-    .src('assets/css/**/*.scss', {
+  const app = gulp
+    .src(['assets/css/**/*.scss', '!assets/css/fonts.scss'], {
       base: 'assets'
     })
     .pipe(sourcemaps.init())
@@ -143,6 +146,23 @@ gulp.task('css', () => {
       )
     )
     .pipe(gulpif(PROD, gulp.dest('build')));
+
+  const fonts = gulp
+    .src('assets/css/fonts.scss', {
+      base: 'assets'
+    })
+    .pipe(sourcemaps.init())
+    .pipe(
+      sass({
+        importer: packageImporter()
+      }).on('error', sass.logError)
+    )
+    .pipe(base64())
+    .pipe(debug('fonts: '))
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('build'));
+
+  return Promise.all([app, fonts]);
 });
 
 gulp.task('lint', () => {
